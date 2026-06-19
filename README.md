@@ -1,0 +1,1 @@
+# This is a Full stack APP that covered all MERN related topics + AI
