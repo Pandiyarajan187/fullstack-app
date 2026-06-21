@@ -13,11 +13,12 @@ DELETE /api/tasks/:id — delete a task
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // @route   POST api/tasks
 // @desc    Create a new task
 // @access  Public
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
     const { title, description, status, project, assignedTo } = req.body;
 
     try {
@@ -88,7 +89,7 @@ router.put('/:id', async (req, res) => {
 // @route   DELETE api/tasks/:id
 // @desc    Delete a task by ID
 // @access  Public
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authMiddleware, async (req, res) => {
     try {
         const task = await Task.findByIdAndDelete(req.params.id);
         if (!task) {
