@@ -10,7 +10,6 @@ const User = require("../models/User");
 router.post("/register", async (req, res) => {
   const { name, email, password, role } = req.body;
 
-  try {
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ msg: "User already exists" });
@@ -28,10 +27,6 @@ router.post("/register", async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
         res.status(201).json({ msg: "User registered successfully", token });
 
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
 });
 
 // @route   POST api/auth/login
@@ -40,7 +35,6 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  try {
     let user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ msg: "Invalid Credentials" });
@@ -54,10 +48,6 @@ router.post("/login", async (req, res) => {
     const payload = { user: { id: user._id } };
        const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN })
        res.status(200).json({ msg: "User logged in successfully", token });
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
 });
 
 module.exports = router;
