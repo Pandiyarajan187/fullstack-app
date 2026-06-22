@@ -17,13 +17,13 @@ router.get("/", async (req, res) => {
 // @access  Public
 router.post("/", authMiddleware, async (req, res) => {
 
-  const project = {
-    title: req.body.title,
-    description: req.body.description,
-    status: req.body.status,
-    members: req.body.members,
-    createdBy: req.user.id
-  }
+      const project = {
+            title: req.body.title,
+            description: req.body.description,
+            status: req.body.status,
+            members: req.body.members,
+            createdBy: req.user.id
+      }
       const projectData = await Project.create(project);
       res.status(201).json(projectData);
 });
@@ -34,7 +34,7 @@ router.post("/", authMiddleware, async (req, res) => {
 router.get("/:id", async (req, res) => {
       const project = await Project.findById(req.params.id);
       if (!project) {
-          return res.status(404).json({ msg: 'Project not found' });
+            return res.status(404).json({ msg: 'Project not found' });
       }
       res.json(project);
 });
@@ -45,7 +45,7 @@ router.get("/:id", async (req, res) => {
 router.put("/:id", authMiddleware, async (req, res) => {
       const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
       if (!project) {
-          return res.status(404).json({ msg: 'Project not found' });
+            return res.status(404).json({ msg: 'Project not found' });
       }
       res.json(project);
 });
@@ -56,7 +56,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
 router.delete("/:id", authMiddleware, async (req, res) => {
       const project = await Project.findByIdAndDelete(req.params.id);
       if (!project) {
-          return res.status(404).json({ msg: 'Project not found' });
+            return res.status(404).json({ msg: 'Project not found' });
       }
       res.json({ msg: 'Project deleted', project });
 });
