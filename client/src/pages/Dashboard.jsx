@@ -1,45 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { Card, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 function Dashboard() {
-    const [projectsName, setProjectsName] = useState([])
-    const navigate = useNavigate()
-    
-    const getProjects = async () => {
-        try {
-            const response = await axios.get('/api/projects', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            setProjectsName(response.data)
-        } catch (error) {
-            alert('Failed to fetch projects. Please try again.')
-        }
-    }
-
-
-    useEffect(() => {
-        const isToken = localStorage.getItem('token')
-        if (!isToken) {
-            navigate('/login')
-        } else {
-            getProjects()
-        }
-    }, [])
-
-
-    return (
-        <div>
-            {projectsName.map((project) => (
-                <div key={project._id}>
-                    <h3>{project.title}</h3>
-                    <p>{project.description}</p>
-                </div>
-            ))}
-        </div>
-    )
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-white mb-2">Welcome back!</h1>
+      <p className="text-gray-400 mb-10">Manage your projects and tasks from one place.</p>
+      <Card className="max-w-sm">
+        <CardContent className="pt-6">
+          <h2 className="text-base font-semibold text-white mb-1">Your Projects</h2>
+          <p className="text-sm text-gray-400 mb-4">View and manage all your projects.</p>
+          <Link to="/projects">
+            <Button className="w-full">Go to Projects</Button>
+          </Link>
+        </CardContent>
+      </Card>
+    </div>
+  )
 }
 
 export default Dashboard

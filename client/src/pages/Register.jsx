@@ -1,48 +1,65 @@
-import React from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 function Register() {
-    const navigate = useNavigate()
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        // Handle form submission logic here
-        const name = e.target.name.value
-        const email = e.target.email.value
-        const password = e.target.password.value
+  const navigate = useNavigate()
 
-        // Example API call to register the user
-        try {
-            const response = await axios.post('/api/auth/register', { name, email, password })
-            console.log('User registered successfully:', response.data)
-            localStorage.setItem('token', response.data.token)
-            navigate('/dashboard')
-        } catch (error) {
-            console.error('Error registering user:', error)
-            alert('Registration failed. Please try again.')
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const name = e.target.name.value
+    const email = e.target.email.value
+    const password = e.target.password.value
+
+    try {
+      const response = await axios.post('/api/auth/register', { name, email, password })
+      localStorage.setItem('token', response.data.token)
+      navigate('/dashboard')
+    } catch (error) {
+      alert(error.response?.data?.msg || 'Registration failed. Please try again.')
     }
+  }
 
-    return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <h2>Register</h2>
-                <div>
-                    <label htmlFor="name">name:</label>
-                    <input type="text" id="name" name="name" />
-                </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input type="email" id="email" name="email" />
-                </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input type="password" id="password" name="password" />
-                </div>
-                <button type="submit">Register</button>
-            </form>
+  return (
+    <div className="min-h-screen bg-[#0d0f14] flex items-center justify-center">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-white">
+            <span className="text-blue-500">{'{PM}'}</span> Manager
+          </h1>
+          <p className="text-gray-400 text-sm mt-2">Create your account</p>
         </div>
-    )
+        <Card>
+          <CardHeader>
+            <CardTitle>Register</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-gray-300">Name</label>
+                <Input type="text" name="name" placeholder="Your name" required />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-gray-300">Email</label>
+                <Input type="email" name="email" placeholder="you@example.com" required />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-gray-300">Password</label>
+                <Input type="password" name="password" placeholder="••••••••" required />
+              </div>
+              <Button type="submit" className="w-full mt-2">Create Account</Button>
+            </form>
+            <p className="text-center text-sm text-gray-500 mt-5">
+              Already have an account?{' '}
+              <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium">Login</Link>
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
 }
 
 export default Register
