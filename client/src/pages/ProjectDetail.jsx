@@ -4,13 +4,15 @@ import axios from 'axios'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '../context/AuthContext'
 
 function ProjectDetail() {
   const { id } = useParams()
+  const { user } = useAuth()
   const [project, setProject] = useState(null)
 
   const fetchProject = async () => {
-    const token = localStorage.getItem('token')
+    const token = user?.token
     try {
       const response = await axios.get(`/api/projects/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
