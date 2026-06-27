@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '../context/AuthContext'
+import TaskList from '../components/TaskList'
 
 function ProjectDetail() {
   const { id } = useParams()
@@ -47,6 +48,7 @@ function ProjectDetail() {
             })}
           </p>
         </CardContent>
+        <TaskList id={project._id} />
       </Card>
     </div>
   )

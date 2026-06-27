@@ -22,6 +22,15 @@ router.get('/', async (req, res) => {
     res.json(tasks);
 });
 
+// GET /api/tasks/project/:projectId  →  find all tasks where project === projectId
+// @route   GET api/tasks/project/:projectId
+// @desc    Get all tasks for a specific project
+// @access  Public
+router.get('/project/:projectId', async (req, res) => {
+    const tasks = await Task.find({ project: req.params.projectId });
+    res.json(tasks);
+});
+
 // @route   GET api/tasks/:id
 // @desc    Get a single task by ID
 // @access  Public
