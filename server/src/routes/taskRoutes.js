@@ -3,6 +3,27 @@ const router = express.Router();
 const Task = require('../models/Task');
 const authMiddleware = require('../middleware/authMiddleware');
 
+// @route   POST api/tasks/stats
+// @desc    Get task stats
+// @access  Public
+router.get('/stats', async (req, res) => {
+    const stats = await Task.aggregate([
+        {
+            $group: {
+                _id: '$status',
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+    const formatted = stats.map(s => ({ statusName: s._id, count: s.count }))
+
+    const totalTasks = await Task.countDocuments();
+    res.json({
+        stats: formatted,
+        totalTasks
+    });
+});
+
 // @route   POST api/tasks
 // @desc    Create a new task
 // @access  Public

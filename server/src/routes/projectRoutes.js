@@ -4,6 +4,27 @@ const router = express.Router();
 const Project = require("../models/Project");
 const authMiddleware = require("../middleware/authMiddleware");
 
+// @route   GET api/projects/stats
+// @desc    Get project stats
+// @access  Public
+router.get('/stats', async (req, res) => {
+      const stats = await Project.aggregate([
+            {
+                  $group: {
+                        _id: '$status',
+                        count: { $sum: 1 }
+                  }
+            }
+      ]);
+    const formatted = stats.map(s => ({ statusName: s._id, count: s.count }))
+
+      const totalProjects = await Project.countDocuments();
+      res.json({
+            stats: formatted,
+            totalProjects
+      });
+});
+
 // @route   GET api/projects
 // @desc    Get all projects
 // @access  Public
