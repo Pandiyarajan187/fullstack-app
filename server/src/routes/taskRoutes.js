@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Task = require('../models/Task');
-const authMiddleware = require('../middleware/authMiddleware');
+const { authMiddleware, adminMiddleware} = require("../middleware/authMiddleware");
+
 
 // @route   POST api/tasks/stats
 // @desc    Get task stats
@@ -87,7 +88,7 @@ router.put('/:id', authMiddleware, async (req, res) => {
 // @route   DELETE api/tasks/:id
 // @desc    Delete a task by ID
 // @access  Public
-router.delete('/:id', authMiddleware, async (req, res) => {
+router.delete('/:id', authMiddleware, adminMiddleware, async (req, res) => {
     const task = await Task.findByIdAndDelete(req.params.id);
     if (!task) {
         return res.status(404).json({ msg: 'Task not found' });

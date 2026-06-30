@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Project = require("../models/Project");
-const authMiddleware = require("../middleware/authMiddleware");
+const { authMiddleware, adminMiddleware} = require("../middleware/authMiddleware");
 
 // @route   GET api/projects/stats
 // @desc    Get project stats
@@ -36,7 +36,7 @@ router.get("/", async (req, res) => {
 // @route   POST api/projects
 // @desc    Create a new project
 // @access  Public
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/", authMiddleware, adminMiddleware, async (req, res) => {
 
       const project = {
             title: req.body.title,
@@ -74,7 +74,7 @@ router.put("/:id", authMiddleware, async (req, res) => {
 // @route   DELETE api/projects/:id
 // @desc    Delete a project by ID
 // @access  Public
-router.delete("/:id", authMiddleware, async (req, res) => {
+router.delete("/:id", authMiddleware, adminMiddleware, async (req, res) => {
       const project = await Project.findByIdAndDelete(req.params.id);
       if (!project) {
             return res.status(404).json({ msg: 'Project not found' });

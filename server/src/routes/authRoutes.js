@@ -21,8 +21,7 @@ router.post("/register", async (req, res) => {
   user.password = await bcrypt.hash(password, salt);
 
   await user.save();
-
-  const payload = { user: { id: user._id } };
+  const payload = { user: { id: user._id, role } };
   // jwt use promise based
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
   res.status(201).json({ msg: "User registered successfully", token });
@@ -45,7 +44,7 @@ router.post("/login", async (req, res) => {
     return res.status(400).json({ msg: "Invalid Credentials" });
   }
 
-  const payload = { user: { id: user._id } };
+  const payload = { user: { id: user._id, role: user.role } };
   const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN })
   res.status(200).json({ msg: "User logged in successfully", token });
 });

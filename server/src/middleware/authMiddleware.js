@@ -15,4 +15,11 @@ const authMiddleware = async function (req, res, next) {
     }
 }
 
-module.exports = authMiddleware;
+const adminMiddleware = async function (req, res, next) {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({ msg: 'Unauthorized' });
+    }
+    next();
+}
+
+module.exports = { authMiddleware, adminMiddleware};
