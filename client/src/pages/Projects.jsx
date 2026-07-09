@@ -10,9 +10,10 @@ function Projects() {
   const [projects, setProjects] = useState([])
   const [showForm, setShowForm] = useState(false)
   const { user } = useAuth()
+  const token = user?.token
+  const role = user?.role
 
   const fetchProjects = async () => {
-    const token = user?.token
     try {
       const response = await axios.get('/api/projects', {
         headers: { Authorization: `Bearer ${token}` }
@@ -31,15 +32,15 @@ function Projects() {
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold text-white">Your Projects</h1>
-        <button
+       {role === 'admin' && <button
           onClick={() => setShowForm(!showForm)}
           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
           {showForm ? 'Cancel' : '+ New Project'}
-        </button>
+        </button>}
       </div>
 
-      {showForm && (
+      {role === "admin" && showForm && (
         <ProjectForm onProjectAdded={() => {
           fetchProjects()
           setShowForm(false)

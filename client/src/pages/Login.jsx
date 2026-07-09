@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '../context/AuthContext'
 
 function Login() {
   const navigate = useNavigate()
+  const { login } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -14,7 +16,7 @@ function Login() {
 
     try {
       const response = await axios.post('/api/auth/login', { email, password })
-      localStorage.setItem('token', response.data.token)
+      login(response.data.token)
       navigate('/dashboard')
     } catch (error) {
       alert(error.response?.data?.msg || 'Login failed. Please try again.')
